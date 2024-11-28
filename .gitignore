@@ -1,0 +1,41 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+db.sqlite3  # Banco de dados SQLite (se estiver usando)
+media/
+static/
+
+# Django migrations
+*/migrations/*
+
+# Node.js (React)
+node_modules/
+npm-debug.log
+yarn-error.log
+*.lock
+
+# Build do React
+build/
+dist/
+
+# Arquivos de configuração locais
+.env
+
+# IDEs e editores
+.vscode/
+.idea/
+*.iml
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.swp
+*.swo
+
+# Outros
+*.bak
+*.tmp
