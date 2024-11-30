@@ -41,7 +41,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'hosp',
+    'rest_framework_simplejwt',
+    'django_extensions',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
