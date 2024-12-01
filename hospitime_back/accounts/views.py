@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.serializers import Serializer, CharField, ModelSerializer
 from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
+from .models import Profile
+from rest_framework.permissions import IsAuthenticated
 
 # Serializador para login
 class LoginSerializer(Serializer):
@@ -38,7 +40,7 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password', 'confirm_password']
 
     def validate(self, data):
         # Validando se as senhas coincidem
@@ -49,6 +51,8 @@ class UserSerializer(ModelSerializer):
     def create(self, validated_data):
         # Remover a confirmação de senha para não tentar salvar no banco
         validated_data.pop('confirm_password')
+
+        # Criar o usuário
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -56,6 +60,10 @@ class UserSerializer(ModelSerializer):
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', '')
         )
+
+        # Criar um perfil vazio ou inicial para o usuário
+        Profile.objects.create(user=user)
+
         return user
 
 
@@ -67,3 +75,49 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response({"message": "Usuário cadastrado com sucesso!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileSerializer(ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['birth_date', 'health_plan', 'address']
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados podem acessar
+
+    def get(self, request):
+        try:
+            # Obtém o usuário autenticado
+            user = request.user
+            profile = user.profile
+
+            # Serializa os dados do usuário e do perfil
+            user_serializer = UserSerializer(user)
+            profile_serializer = ProfileSerializer(profile)
+
+            # Combina os dados do perfil e do usuário
+            data = {**user_serializer.data, **profile_serializer.data}
+            return Response(data)
+
+        except Profile.DoesNotExist:
+            return Response({'detail': 'Perfil não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request):
+        try:
+            user = request.user
+            profile = user.profile
+
+            # Atualiza os dados do perfil
+            profile_serializer = ProfileSerializer(profile, data=request.data, partial=True)
+            if profile_serializer.is_valid():
+                profile_serializer.save()
+
+            # Atualiza os dados do usuário
+            user_serializer = UserSerializer(user, data=request.data, partial=True)
+            if user_serializer.is_valid():
+                user_serializer.save()
+
+            return Response(user_serializer.data)  # Retorna os dados atualizados do usuário
+        except Profile.DoesNotExist:
+            return Response({'detail': 'Perfil não encontrado'}, status=status.HTTP_404_NOT_FOUND)

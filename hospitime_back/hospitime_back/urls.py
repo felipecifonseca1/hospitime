@@ -19,7 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('accounts/', include('accounts.urls')),  # Rota para login
     path('hosp/', include('hosp.urls')),
     path('api/', include('accounts.urls')),
 ]
