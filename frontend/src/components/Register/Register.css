@@ -79,4 +79,14 @@ button:hover {
     background-color: rgb(170, 73, 73); 
 }
 
+/* Altere o tamanho da caixa seletora */
+select {
+    width: 200px;   /* Define a largura da caixa */
+    height: 40px;   /* Define a altura da caixa */
+    font-size: 16px; /* Tamanho da fonte dentro da caixa */
+    padding: 5px;   /* Adiciona preenchimento interno */
+    border-radius: 5px; /* Adiciona borda arredondada */
+    border: 1px solid #ccc; /* Define a cor da borda */
+    background-color: #f9f9f9; /* Cor de fundo */
+}
 
