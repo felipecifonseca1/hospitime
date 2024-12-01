@@ -1,0 +1,82 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
+}
+
+.register-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center; /* Centralizar o conteúdo dentro da caixa */
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px; /* Espaçamento abaixo do título */
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(209, 89, 90);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: rgb(170, 73, 73);
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+.link_botao a {
+    color: white; 
+    text-decoration: none; 
+}
+
+.link_botao button {
+    background-color: rgb(209, 89, 90); 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px; 
+    cursor: pointer; 
+    font-size: 16px;
+}
+
+.link_botao button:hover {
+    background-color: rgb(170, 73, 73); 
+}
+
+

@@ -1,0 +1,55 @@
+/* Navbar.css */
+.navbar {
+    background-color: rgb(209, 89, 90);  
+    padding: 15px 30px;         
+    position: fixed;           
+    top: 0;                     
+    left: 0;                    
+    width: 100%;               
+    z-index: 1000;              
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;          
+    margin: 0 auto;             
+    width: 100%;                
+}
+
+.navbar-logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-item {
+    font-size: 16px;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar-link:hover {
+    text-decoration: underline;
+}
+
+.app-content {
+    padding-top: 60px;  /* Evita que o conteúdo fique escondido atrás da navbar */
+}
+
+.navbar .active {
+    color: white;
+    font-weight: bold;
+}

@@ -1,0 +1,107 @@
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container do login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Estilo dos campos de entrada */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.input-group input:focus {
+    border-color: rgb(209, 89, 90);
+    outline: none;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.links {
+    margin-top: 20px;
+}
+
+.links a {
+    color: rgb(209, 89, 90);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.link_botao a {
+    color: white; 
+    text-decoration: none; 
+}
+
+.link_botao button {
+    background-color: rgb(209, 89, 90); 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px; 
+    cursor: pointer; 
+    font-size: 16px;
+}
+
+.link_botao button:hover {
+    background-color: rgb(170, 73, 73); 
+}
