@@ -53,7 +53,7 @@ const Login = () => {
                     </div>
                 </form>
                 <div className="links">
-                    <a href="/register">Cadastre-se</a> | <a href="/esqueci-senha">Esqueceu a senha?</a>
+                    <a href="/register">Cadastre-se</a> | <a href="/forgot-password">Esqueceu a senha?</a>
                 </div>
             </div>
         </div>

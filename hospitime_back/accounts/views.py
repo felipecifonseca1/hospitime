@@ -9,6 +9,12 @@ from rest_framework.exceptions import ValidationError
 from .models import Profile
 from rest_framework.permissions import IsAuthenticated
 
+from django.core.mail import send_mail, EmailMessage
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.forms import PasswordResetForm
+
 # Serializador para login
 class LoginSerializer(Serializer):
     username = CharField(max_length=100)
@@ -121,3 +127,32 @@ class ProfileView(APIView):
             return Response(user_serializer.data)  # Retorna os dados atualizados do usuário
         except Profile.DoesNotExist:
             return Response({'detail': 'Perfil não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+class ForgotPasswordView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+
+        if not email:
+            return Response({'detail': 'E-mail não fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'detail': 'Usuário com este e-mail não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Gerar o link de redefinição de senha
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(user.pk.encode('utf-8')).decode()
+
+        reset_url = f'http://localhost:3000/reset-password/{uid}/{token}/'
+
+        # Enviar e-mail com o link
+        send_mail(
+            'Redefinição de Senha',
+            f'Clique no link para redefinir sua senha: {reset_url}',
+            'mecaestudospoliusp@gmail.com',
+            [email],
+            fail_silently=False,
+        )
+
+        return Response({'detail': 'Link para redefinição de senha enviado para seu e-mail.'}, status=status.HTTP_200_OK)
