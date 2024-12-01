@@ -6,7 +6,7 @@ import Hospitals from './components/Hospitals/Hospitals'; // Página dos hospita
 import Home from './components/Home/Home';    // Página inicial (Home)
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
-
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
           <Route path="/hospitais" element={<Hospitals />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/forgot-password" element={<ForgotPassword/>} />
         </Routes>
       </div>
     </Router>
