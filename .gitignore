@@ -15,27 +15,3 @@ node_modules/
 npm-debug.log
 yarn-error.log
 *.lock
-
-# Build do React
-build/
-dist/
-
-# Arquivos de configuração locais
-.env
-
-# IDEs e editores
-.vscode/
-.idea/
-*.iml
-
-# Logs
-*.log
-logs/
-
-# Arquivos temporários
-*.swp
-*.swo
-
-# Outros
-*.bak
-*.tmp
