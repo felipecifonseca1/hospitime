@@ -4,7 +4,7 @@ from .models import Hospital, Comentario
 class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
-        fields = ['id', 'name', 'rede', 'specialty', 'location', 'average_wait_time']
+        fields = ['id', 'name', 'rede', 'specialty', 'location', 'average_wait_time', 'convenios']
 
 class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:

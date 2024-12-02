@@ -17,6 +17,8 @@ const Register = () => {
     const [specialties, setSpecialties] = useState(''); // Especialidades (hospital)
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [network, setNetwork] = useState('');
+    const [convenios, setConvenios] = useState(''); // Rede do hospital
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
@@ -51,6 +53,7 @@ const Register = () => {
                 hospital_name: userType === 'hospital' ? hospitalName : undefined,
                 address: userType === 'hospital' ? address : undefined,
                 specialties: userType === 'hospital' ? specialties : undefined,
+                network: userType === 'hospital' ? network : undefined,
                 health_plan: userType === 'patient' ? healthPlan : undefined
             });
 
@@ -193,6 +196,26 @@ const Register = () => {
                                     type="text"
                                     value={specialties}
                                     onChange={(e) => setSpecialties(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label>Rede de Saúde:</label>
+                                <input
+                                    type="text"
+                                    value={network}
+                                    onChange={(e) => setNetwork(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label>Convênios Atendidos:</label>
+                                <input
+                                    type="text"
+                                    value={convenios}
+                                    onChange={(e) => setConvenios(e.target.value)}
                                     required
                                 />
                             </div>
