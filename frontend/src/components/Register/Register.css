@@ -1,3 +1,4 @@
+
 .register-container {
     display: flex;
     justify-content: center;
@@ -79,4 +80,13 @@ button:hover {
     background-color: rgb(170, 73, 73); 
 }
 
-
+/* Altere o tamanho da caixa seletora */
+select {
+    width: 200px;   /* Define a largura da caixa */
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;   /* Adiciona preenchimento interno */
+    border-radius: 5px; /* Adiciona borda arredondada */
+    border: 1px solid #ccc; /* Define a cor da borda */
+    background-color: white; /* Cor de fundo */
+}

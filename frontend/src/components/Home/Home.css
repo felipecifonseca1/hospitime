@@ -1,22 +1,134 @@
+/* Home.css */
+
+/* Container Principal */
 .home-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
- 
-.home-content {
-padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  position: relative;
 }
-  
+
+/* Bloco que contém a Caixa de Pesquisa e o Botão de Filtro */
+.search-block {
+  display: flex;
+  flex-direction: column; /* Organiza a caixa de pesquisa e o botão em uma coluna */
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Espaçamento entre a caixa de pesquisa, o filtro e o botão */
+  z-index: 1;
+}
+
+/* Formulário de Pesquisa */
+.search-form {
+  display: flex;
+  flex-direction: line; /* Coloca os elementos um abaixo do outro */
+  align-items: center;
+  gap: 10px; /* Espaçamento entre os inputs e o botão */
+}
+
+/* Input de Pesquisa */
+.search-input {
+  width: 300px; /* Tamanho da caixa de pesquisa */
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão de Filtro */
+.filter-button {
+  width: 150px;
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgb(209, 89, 90);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 10px; /* Espaçamento entre o filtro e a caixa de pesquisa */
+}
+
+.filter-button:hover {
+  background-color: #000;
+}
+
+/* Dropdown de Filtros */
+.filter-dropdown {
+  top: 80px; /* Distância do topo em relação ao botão */
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Select de Filtro (Bairro e Especialidade) */
+.bairro-select,
+.especialidade-select {
+  width: 100%; /* Faz com que o filtro ocupe a largura inteira */
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Botão de Filtrar dentro do Dropdown */
+.search-button {
+  width: 100%;
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgb(209, 89, 90);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #000;
+}
+
+/* Conteúdo Principal - Título */
+.home-content {
+  padding: 20px;
+  text-align: center;
+}
+
 .home-title {
-font-size: 50px;
-color: #333;
-margin-bottom: 20px;
+  font-size: 50px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Logo */
+.home-logo-container {
+  margin-top: 20px;
 }
 
 .home-logo {
-width: 250px;  
-height: auto;  
-margin-top: 10px;  
-} 
+  width: 250px;
+  height: auto;
+}

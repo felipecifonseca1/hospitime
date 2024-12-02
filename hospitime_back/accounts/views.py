@@ -150,7 +150,7 @@ class ForgotPasswordView(APIView):
         send_mail(
             'Redefinição de Senha',
             f'Clique no link para redefinir sua senha: {reset_url}',
-            'mecaestudospoliusp@gmail.com',
+            '',
             [email],
             fail_silently=False,
         )

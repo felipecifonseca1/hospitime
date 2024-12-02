@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Login.css'; // Vamos adicionar o arquivo de CSS
+import { useNavigate } from 'react-router-dom';
+import './Login.css'; // Importando o arquivo CSS
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate(); // Hook do React Router para navegação
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/login/', { username, password });
-            
-            // Armazenar o token JWT no localStorage
+            const response = await axios.post('http://localhost:8000/api/login/', {
+                username,
+                password,
+            });
+
+            // Armazenando o token JWT no localStorage
             localStorage.setItem('token', response.data.token);
 
-            // Redirecionar para o perfil ou home após login
-            window.location.href = '/profile';
+            // Redirecionando para a página Home após login bem-sucedido
+            navigate('/home'); // Redireciona para a página Home
         } catch (err) {
             setError('Credenciais inválidas.');
         }
