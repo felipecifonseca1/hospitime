@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../../assets/images/logo.png';
 
@@ -8,6 +8,7 @@ const Home = () => {
     const [especialidade, setEspecialidade] = useState('');
     const [hospitals, setHospitals] = useState([]);
     const [isFilterOpen, setIsFilterOpen] = useState(false); // Controla a exibição do filtro
+    const [debounceTimeout, setDebounceTimeout] = useState(null); // Estado para o debounce
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
@@ -21,14 +22,14 @@ const Home = () => {
         setEspecialidade(e.target.value);
     };
 
-    // Função para realizar a pesquisa ao clicar no botão
-    const handleSearchSubmit = async () => {
+    // Função para realizar a pesquisa
+    const handleSearch = async () => {
         console.log('Pesquisando por hospital:', search, 'no bairro:', bairro, 'com especialidade:', especialidade);
 
         try {
             const response = await fetch(`http://localhost:8000/api/hospitals?name=${search}&bairro=${bairro}&especialidade=${especialidade}`);
             const data = await response.json();
-            setHospitals(data);  // Atualiza os hospitais encontrados
+            setHospitals(data); // Atualiza os hospitais encontrados
         } catch (error) {
             console.error('Erro ao buscar hospitais:', error);
         }
@@ -38,6 +39,21 @@ const Home = () => {
     const toggleFilterMenu = () => {
         setIsFilterOpen(!isFilterOpen);
     };
+
+    // Função para realizar a pesquisa com debouncing
+    useEffect(() => {
+        // Se a pesquisa for alterada, aguarda um tempo antes de fazer a requisição
+        if (debounceTimeout) clearTimeout(debounceTimeout); // Limpar o timeout anterior
+
+        const newTimeout = setTimeout(() => {
+            handleSearch(); // Chama a função de pesquisa após o tempo de espera
+        }, 500); // Espera 500ms após a última digitação
+
+        setDebounceTimeout(newTimeout); // Atualiza o timeout
+
+        // Limpar o timeout quando o componente for desmontado ou quando search mudar
+        return () => clearTimeout(newTimeout);
+    }, [search, bairro, especialidade]); // Re-executa quando os valores de pesquisa ou filtros mudarem
 
     return (
         <div className="home-container">
@@ -51,6 +67,11 @@ const Home = () => {
                         className="search-input"
                         placeholder="Pesquise por hospitais"
                     />
+
+                    {/* Botão de Buscar */}
+                    <button type="button" onClick={handleSearch} className="search-button">
+                        Buscar
+                    </button>
 
                     {/* Botão de Filtro */}
                     <button type="button" onClick={toggleFilterMenu} className="filter-button">
@@ -76,9 +97,6 @@ const Home = () => {
                                 <option value="pediatria">Pediatria</option>
                                 <option value="neurologia">Neurologia</option>
                             </select>
-
-                            {/* Botão de Filtrar dentro do Dropdown */}
-                            <button type="button" onClick={handleSearchSubmit} className="search-button">Filtrar</button>
                         </div>
                     )}
                 </form>

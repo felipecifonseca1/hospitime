@@ -1,5 +1,3 @@
-/* Home.css */
-
 /* Container Principal */
 .home-container {
   display: flex;
@@ -11,27 +9,28 @@
   position: relative;
 }
 
-/* Bloco que contém a Caixa de Pesquisa e o Botão de Filtro */
-.search-block {
+/* Barra de Pesquisa */
+.search-bar {
   display: flex;
-  flex-direction: column; /* Organiza a caixa de pesquisa e o botão em uma coluna */
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* Espaçamento entre a caixa de pesquisa, o filtro e o botão */
-  z-index: 1;
+  flex-direction: row;   /* Alinha horizontalmente */
+  justify-content: center; /* Centraliza os elementos */
+  align-items: center;   /* Alinha verticalmente */
+  gap: 10px;             /* Espaçamento entre os elementos */
+  position: relative;
 }
 
 /* Formulário de Pesquisa */
 .search-form {
   display: flex;
-  flex-direction: line; /* Coloca os elementos um abaixo do outro */
-  align-items: center;
-  gap: 10px; /* Espaçamento entre os inputs e o botão */
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
 }
 
 /* Input de Pesquisa */
 .search-input {
-  width: 300px; /* Tamanho da caixa de pesquisa */
+  width: 300px;
+  height: 40px; /* Mantém a altura igual ao botão */
   padding: 12px 20px;
   border: 2px solid #ddd;
   border-radius: 30px;
@@ -44,10 +43,30 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Botão de Buscar */
+.search-button {
+  width: 150px;
+  height: 40px; /* Mantém a altura igual ao da caixa de pesquisa e botão de filtro */
+  padding: 10 30px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgb(209, 89, 90);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgb(222, 75, 75);
+  position: relative;
+}
+
+.search-button:hover {
+  background-color: rgb(185, 50, 50);  /* Cor mais escura ao passar o mouse */
+}
+
 /* Botão de Filtro */
 .filter-button {
   width: 150px;
-  height: 40px;
+  height: 40px; /* Mantém a altura igual ao da caixa de pesquisa */
   padding: 0 20px;
   border: none;
   border-radius: 30px;
@@ -55,33 +74,35 @@
   color: white;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 10px; /* Espaçamento entre o filtro e a caixa de pesquisa */
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgb(222, 75, 75);
+  position: relative;
 }
 
 .filter-button:hover {
-  background-color: #000;
+  background-color: rgb(185, 50, 50);  /* Cor mais escura ao passar o mouse */
 }
 
 /* Dropdown de Filtros */
 .filter-dropdown {
-  top: 80px; /* Distância do topo em relação ao botão */
-  left: 0;
-  width: 100%;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Alinha verticalmente ao centro do botão */
+  left: 100%; /* Posiciona o dropdown à direita do botão */
+  transform: translateY(-50%); /* Ajusta o alinhamento vertical */
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  width: 300px;
 }
 
 /* Select de Filtro (Bairro e Especialidade) */
 .bairro-select,
 .especialidade-select {
-  width: 100%; /* Faz com que o filtro ocupe a largura inteira */
+  width: 100%;
   padding: 12px 20px;
   border: 2px solid #ddd;
   border-radius: 30px;
@@ -90,25 +111,6 @@
   background-color: #fff;
   outline: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* Botão de Filtrar dentro do Dropdown */
-.search-button {
-  width: 100%;
-  height: 40px;
-  padding: 0 20px;
-  border: none;
-  border-radius: 30px;
-  background-color: rgb(209, 89, 90);
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.search-button:hover {
-  background-color: #000;
 }
 
 /* Conteúdo Principal - Título */
@@ -129,6 +131,34 @@
 }
 
 .home-logo {
-  width: 250px;
+  width: 200px;
   height: auto;
+}
+
+/* Cartões de Hospitais */
+.hospital-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 20px;
+}
+
+.hospital-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hospital-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.hospital-card p {
+  margin-top: 10px;
+  color: #777;
 }

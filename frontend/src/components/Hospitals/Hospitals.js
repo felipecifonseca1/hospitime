@@ -1,14 +1,19 @@
-/*import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Hospitals = () => {
     const [hospitals, setHospitals] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const { id } = useParams();  // Obter o ID do hospital da URL
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         fetch('http://localhost:8000/hosp/api/hospitals/')
             .then(response => response.json())
             .then(data => {
                 setHospitals(data);
+                console.log("Hospitais carregados:", data); // Aqui imprime os hospitais com seus IDs
                 setLoading(false);
             })
             .catch(error => {
@@ -16,6 +21,14 @@ const Hospitals = () => {
                 setLoading(false);
             });
     }, []);
+
+    // Função para navegar para o hospital selecionado
+    const handleSelectHospital = (hospitalId) => {
+        console.log("Hospital ID:", hospitalId); // Verifique o valor do ID
+        navigate(`/hospitais/${Number(hospitalId)}`);  // Navega para a página de detalhamento
+    };
+    // Obter o hospital atual com base no ID da URL
+    const currentHospital = hospitals.find(hospital => hospital.id === parseInt(id));
 
     return (
         <div className="hospitals-container">
@@ -25,122 +38,42 @@ const Hospitals = () => {
                 <p>Carregando dados...</p>
             ) : (
                 <div>
-                    {hospitals.length > 0 ? (
+                    {/* {currentHospital ? (
+                        <div>
+                            <h2>{currentHospital.name}</h2>
+                            <p><strong>Especialidade:</strong> {currentHospital.specialty}</p>
+                            <p><strong>Localização:</strong> {currentHospital.location}</p>
+                            <p><strong>Tempo médio de espera:</strong> {currentHospital.average_wait_time} minutos</p>
+                        </div>
+                    ) : (
+                        <p>Hospital não encontrado.</p>
+                    )} */}
+
+                    {/* Lista de hospitais para selecionar */}
+                    <div>
+                        <h3>Escolha um hospital</h3>
                         <ul>
                             {hospitals.map((hospital) => (
-                                <li key={hospital.id}>
-                                    <h3>{hospital.name}</h3>
-                                    <h4>{hospital.rede}</h4>
-                                    <p><strong>Especialidades:</strong> {hospital.specialty}</p>
-                                    <p><strong>Localização:</strong> {hospital.location}</p>
-                                    <p><strong>Tempo médio de espera:</strong> {hospital.average_wait_time} minutos</p>
+                                <li
+                                    key={hospital.id}
+                                    onClick={() => {
+                                        console.log("ID do hospital sendo clicado:", hospital.id); // Verifique o ID ao clicar
+                                        handleSelectHospital(hospital.id);
+                                    }}
+                                    style={{ cursor: 'pointer', color: 'blue' }}
+                                >
+                                    {hospital.name}
                                 </li>
                             ))}
                         </ul>
-                    ) : (
-                        <p>Nenhum hospital encontrado.</p>
-                    )}
+                    </div>
                 </div>
             )}
-        </div>
-    );
-};
 
-export default Hospitals; */
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const HospitalDetails = ({ hospitalId }) => {
-    const [hospital, setHospital] = useState(null);
-    const [comentarios, setComentarios] = useState([]);
-    const [novoComentario, setNovoComentario] = useState('');
-    const [rede, setRede] = useState('');
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        const fetchHospitalDetails = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8000/api/hospitais/${hospitalId}`);
-                setHospital(response.data);
-                setRede(response.data.rede);  // Atribuindo o atributo "Rede"
-                fetchComentarios(response.data.id);
-            } catch (err) {
-                setError('Erro ao carregar os dados do hospital');
-            }
-        };
-
-        const fetchComentarios = async (hospitalId) => {
-            try {
-                const response = await axios.get(`http://localhost:8000/api/hospitais/${hospitalId}/comentarios/`);
-                setComentarios(response.data);
-            } catch (err) {
-                setError('Erro ao carregar os comentários');
-            }
-        };
-
-        fetchHospitalDetails();
-    }, [hospitalId]);
-
-    const handleComentarioChange = (e) => {
-        setNovoComentario(e.target.value);
-    };
-
-    const handleComentarioSubmit = async () => {
-        if (novoComentario.trim() === '') {
-            return;
-        }
-
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post(
-                `http://localhost:8000/api/hospitais/${hospitalId}/comentarios/`,
-                { comentario: novoComentario },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setComentarios([...comentarios, response.data]);
-            setNovoComentario('');
-        } catch (err) {
-            setError('Erro ao postar comentário');
-        }
-    };
-
-    return (
-        <div>
+            {/* Exibir mensagem de erro caso ocorra */}
             {error && <p>{error}</p>}
-            {hospital ? (
-                <>
-                    <h2>{hospital.nome}</h2>
-                    <p>{hospital.endereco}</p>
-                    <p><strong>Rede:</strong> {rede}</p>
-
-                    <h3>Comentários</h3>
-                    <div>
-                        {comentarios.map((comentario) => (
-                            <div key={comentario.id}>
-                                <p>{comentario.usuario.username}</p>
-                                <p>{comentario.comentario}</p>
-                                <p>{new Date(comentario.data_criacao).toLocaleString()}</p>
-                            </div>
-                        ))}
-                    </div>
-
-                    <textarea
-                        value={novoComentario}
-                        onChange={handleComentarioChange}
-                        placeholder="Deixe seu comentário"
-                    />
-                    <button onClick={handleComentarioSubmit}>Postar Comentário</button>
-                </>
-            ) : (
-                <p>Carregando dados do hospital...</p>
-            )}
         </div>
     );
 };
 
-export default HospitalDetails;
+export default Hospitals;

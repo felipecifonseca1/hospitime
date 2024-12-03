@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Hospital
 
-# Register your models here.
+# Registro do modelo Hospital no admin
+admin.site.register(Hospital)

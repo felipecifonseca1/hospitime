@@ -17,8 +17,8 @@ const Register = () => {
     const [specialties, setSpecialties] = useState(''); // Especialidades (hospital)
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-    const [network, setNetwork] = useState('');
-    const [convenios, setConvenios] = useState(''); // Rede do hospital
+    const [network, setNetwork] = useState(''); // Rede do hospital
+    const [convenios, setConvenios] = useState(''); // Convênios (hospital)
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
@@ -42,13 +42,14 @@ const Register = () => {
         }
 
         try {
+            // Enviando dados para o backend
             const response = await axios.post('http://localhost:8000/api/register/', {
-                username,
-                email,
+                username: userType === 'patient' ? username : undefined,
+                email: userType === 'patient' ? email : undefined,
                 password,
                 confirm_password: confirmPassword,
-                first_name: firstName,
-                last_name: lastName,
+                first_name: userType === 'patient' ? firstName : undefined,
+                last_name: userType === 'patient' ? lastName : undefined,
                 user_type: userType,
                 hospital_name: userType === 'hospital' ? hospitalName : undefined,
                 address: userType === 'hospital' ? address : undefined,
@@ -57,15 +58,28 @@ const Register = () => {
                 health_plan: userType === 'patient' ? healthPlan : undefined
             });
 
+            // Armazenar tipo de usuário no localStorage após o sucesso
             localStorage.setItem('userType', userType);
 
+            // Redireciona o usuário para a página de login
             navigate('/login');
 
+            // Exibe a mensagem de sucesso
             setMessage(response.data.message);
             setError('');
         } catch (error) {
+            // Verifica o tipo de erro e exibe a mensagem correta
             setMessage('');
-            setError(error.response?.data?.detail || 'Erro ao cadastrar.');
+            if (error.response) {
+                // Se o erro for de resposta do servidor
+                setError(error.response.data.detail || 'Erro ao cadastrar. Tente novamente.');
+            } else if (error.request) {
+                // Se não houver resposta (erro de rede, timeout, etc)
+                setError('Erro de rede. Verifique sua conexão.');
+            } else {
+                // Outros erros gerais
+                setError('Ocorreu um erro inesperado. Tente novamente.');
+            }
         }
     };
 
@@ -155,6 +169,7 @@ const Register = () => {
                                 />
                             </div>
 
+
                             <div className="input-group">
                                 <label>Plano de Saúde:</label>
                                 <input
@@ -222,11 +237,14 @@ const Register = () => {
                         </>
                     )}
 
+                    {/* Exibindo erros */}
                     {error && <p className="error">{error}</p>}
                     <div className="link_botao">
                         <button type="submit">Cadastrar</button>
                     </div>
                 </form>
+
+                {/* Mensagem de sucesso */}
                 {message && <p>{message}</p>}
             </div>
         </div>
@@ -234,7 +252,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-
-

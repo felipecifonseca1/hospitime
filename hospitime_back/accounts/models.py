@@ -10,3 +10,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Perfil de {self.user.username}"
+    
+class Hospital(models.Model):
+    # Campos que o hospital terá
+    name = models.CharField(max_length=255)
+    rede = models.CharField(max_length=255, null=True)
+    specialty = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    convenios = models.CharField(max_length=255, null=True, blank=True)

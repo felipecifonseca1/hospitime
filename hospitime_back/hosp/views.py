@@ -1,53 +1,52 @@
 from rest_framework.views import APIView
-from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Hospital, Comentario
-from .serializers import HospitalSerializer
-from .serializers import ComentarioSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
+from .models import Hospital, TempoEspera
+from .serializers import TempoEsperaSerializer, HospitalSerializer
+from django.shortcuts import get_object_or_404
+
 
 class HospitalList(APIView):
     def get(self, request):
         hospitals = Hospital.objects.all()
         serializer = HospitalSerializer(hospitals, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class HospitalDetail(APIView):
+    def get(self, request, id):
+        try:
+            hospital = Hospital.objects.get(id=id)
+            serializer = HospitalSerializer(hospital)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Hospital.DoesNotExist:
+            return Response({"detail": "Hospital não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+class AdicionarTempoEspera(APIView):
+    def post(self, request, id):
+        hospital = get_object_or_404(Hospital, id=id)
+        
+        # Verifica se o usuário está autenticado
+        if not request.user.is_authenticated:
+            return Response({"detail": "Autenticação necessária."}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # Obtém o tempo de espera enviado
+        tempo_espera = request.data.get('tempo_espera')
+
+        if not tempo_espera:
+            return Response({"detail": "O tempo de espera é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Cria um novo registro de tempo de espera
+        tempo_espera_obj = TempoEspera.objects.create(
+            hospital=hospital,
+            tempo_espera=tempo_espera,
+            usuario=request.user
+        )
+
+        # Atualiza a média do tempo de espera
+        hospital.average_wait_time = hospital.calcular_media_tempos_espera()
+        hospital.save()
+
+        # Retorna o hospital atualizado com o novo tempo de espera
+        hospital_serializer = HospitalSerializer(hospital)
+        return Response(hospital_serializer.data, status=status.HTTP_201_CREATED)
     
-
-@api_view(['GET'])
-def search_hospitals(request):
-    name = request.GET.get('name', '')
-    bairro = request.GET.get('bairro', '')
-    especialidade = request.GET.get('especialidade', '')
-
-    hospitals = Hospital.objects.all()
-
-    if name:
-        hospitals = hospitals.filter(name__icontains=name)
-    if bairro:
-        hospitals = hospitals.filter(bairro__icontains=bairro)
-    if especialidade:
-        hospitals = hospitals.filter(especialidade__icontains=especialidade)
-
-    serializer = HospitalSerializer(hospitals, many=True)
-    return Response(serializer.data)
-
-class ComentarioViewSet(viewsets.ModelViewSet):
-    queryset = Comentario.objects.all()
-    serializer_class = ComentarioSerializer
-
-    def perform_create(self, serializer):
-        # Assume que o usuário está autenticado
-        user = self.request.user
-        hospital_id = self.kwargs['hospital_id']
-        hospital = Hospital.objects.get(id=hospital_id)
-        serializer.save(usuario=user, hospital=hospital)
-
-    def get_queryset(self):
-        hospital_id = self.kwargs['hospital_id']
-        return Comentario.objects.filter(hospital_id=hospital_id)
-
-    # Permitir apenas usuários autenticados para criar comentários
-    permission_classes = [IsAuthenticated]

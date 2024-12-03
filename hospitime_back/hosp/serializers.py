@@ -1,13 +1,8 @@
 from rest_framework import serializers
-from .models import Hospital, Comentario
+from .models import Hospital, TempoEspera
 
-class HospitalSerializer(serializers.ModelSerializer):
+class TempoEsperaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Hospital
-        fields = ['id', 'name', 'rede', 'specialty', 'location', 'average_wait_time', 'convenios']
+        model = TempoEspera
+        fields = ['id', 'hospital', 'tempo_espera', 'usuario', 'data_criacao']
 
-class ComentarioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comentario
-        fields = ['usuario', 'comentario', 'data_criacao']
-        read_only_fields = ['usuario', 'data_criacao']

@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
 from .models import Profile
 from rest_framework.permissions import IsAuthenticated
+from .models import Hospital
+from .serializers import HospitalSerializer
 
 from django.core.mail import send_mail, EmailMessage
 from django.urls import reverse
@@ -156,3 +158,11 @@ class ForgotPasswordView(APIView):
         )
 
         return Response({'detail': 'Link para redefinição de senha enviado para seu e-mail.'}, status=status.HTTP_200_OK)
+
+class RegisterHospitalView(APIView):
+    def post(self, request):
+        serializer = HospitalSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # Salva os dados no banco
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
