@@ -7,9 +7,8 @@ from rest_framework.serializers import Serializer, CharField, ModelSerializer
 from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
 from .models import Profile
+from .serializers import UserSerializer, ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
-from .models import Hospital
-from .serializers import HospitalSerializer
 
 from django.core.mail import send_mail, EmailMessage
 from django.urls import reverse
@@ -41,55 +40,20 @@ class LoginView(APIView):
                 return Response({"error": "Credenciais inválidas"}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Serializador para o cadastro de usuário
-class UserSerializer(ModelSerializer):
-    password = CharField(write_only=True)
-    confirm_password = CharField(write_only=True)  # Campo de confirmação de senha
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password', 'confirm_password']
-
-    def validate(self, data):
-        # Validando se as senhas coincidem
-        if data['password'] != data['confirm_password']:
-            raise ValidationError("As senhas não coincidem.")
-        return data
-
-    def create(self, validated_data):
-        # Remover a confirmação de senha para não tentar salvar no banco
-        validated_data.pop('confirm_password')
-
-        # Criar o usuário
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', '')
-        )
-
-        # Criar um perfil vazio ou inicial para o usuário
-        Profile.objects.create(user=user)
-
-        return user
-
-
 # View de Cadastro de Usuário
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            adicional_data = {
+                'birth_date': request.data.get('birth_date'),  # Usando .get() para evitar erros de chave inexistente
+                'health_plan': request.data.get('health_plan'),
+                'address': request.data.get('address'),
+            }
+            validated_data = serializer.validated_data
+            serializer.create(validated_data, adicional_data)
             return Response({"message": "Usuário cadastrado com sucesso!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProfileSerializer(ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['birth_date', 'health_plan', 'address']
-
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]  # Apenas usuários autenticados podem acessar
