@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
-import profileImage from 'frontend/src/assets/images/perfil.png'; // Caminho da imagem
+import profileImage from 'frontend/src/assets/images/teste.png'; // Caminho da imagem
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({

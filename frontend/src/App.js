@@ -9,6 +9,7 @@ import Profile from './components/Profile/Profile';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import HospitalDetail from './components/Hospitals/HospitalDetail';
 import HospitalPage from './components/HospitalPage/HospitalPage';
+import Hospitals from './components/Hospitals/Hospitals';
 
 
 function App() {
@@ -22,8 +23,9 @@ function App() {
           <Route path="/" element={<Home />} />  {/* Página inicial */}
           <Route path="/login" element={<Login />} />  {/* Página de login */}
           <Route path="/hospitais" element={<HospitalsList />} />  {/* Página dos hospitais */}
-          <Route path="/hospitais/:id" element={<HospitalDetail />} />  {/* Nova rota para o detalhamento */}
+          <Route path="/h" element={<HospitalDetail />} />  {/* Nova rota para o detalhamento */}
           <Route path="/hospital" element={<HospitalPage />} />
+          <Route path="/hosp" element={<Hospitals />} />
           <Route path="/home" element={<Home />} />  {/* Página home */}
           <Route path="/register" element={<Register />} />  {/* Página de registro */}
           <Route path="/profile" element={<Profile />} />  {/* Página de perfil */}

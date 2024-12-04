@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom'; // Usando NavLink e useNavigate
 import './Navbar.css';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -26,6 +27,10 @@ const Navbar = () => {
                     <li className="navbar-item">
                         <NavLink to="/" className="navbar-link">Home</NavLink>
                     </li>
+                    
+                    {/* <li className="navbar-item">
+                        <NavLink to="/profile" className="navbar-link">Meu perfil</NavLink>
+                    </li> */}
 
                     {/* Verifica se o usuário está logado */}
                     {isLoggedIn ? (
@@ -39,8 +44,8 @@ const Navbar = () => {
 
                             {/* Se o usuário for hospital, exibe a opção de gerenciar hospitais */}
                             {userType === 'hospital' && (
-                                <li className="navbar-item">
-                                    <NavLink to="/manage-hospitals" className="navbar-link">Gerenciar Hospitais</NavLink>
+                                <li>
+                                    <NavLink to="/hosp" className="navbar-link">Gerenciar Hospitais</NavLink>
                                 </li>
                             )}
 
