@@ -1,22 +1,164 @@
+/* Container Principal */
 .home-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
- 
-.home-content {
-padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  position: relative;
 }
-  
+
+/* Barra de Pesquisa */
+.search-bar {
+  display: flex;
+  flex-direction: row;   /* Alinha horizontalmente */
+  justify-content: center; /* Centraliza os elementos */
+  align-items: center;   /* Alinha verticalmente */
+  gap: 10px;             /* Espaçamento entre os elementos */
+  position: relative;
+}
+
+/* Formulário de Pesquisa */
+.search-form {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
+}
+
+/* Input de Pesquisa */
+.search-input {
+  width: 260px;
+  height: 40px; /* Mantém a altura igual ao botão */
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão de Buscar */
+.search-button {
+  width: 150px;
+  height: 40px; /* Mantém a altura igual ao da caixa de pesquisa e botão de filtro */
+  padding: 10 30px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgb(209, 89, 90);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgb(222, 75, 75);
+  position: relative;
+}
+
+.search-button:hover {
+  background-color: rgb(185, 50, 50);  /* Cor mais escura ao passar o mouse */
+}
+
+/* Botão de Filtro */
+.filter-button {
+  width: 150px;
+  height: 40px; /* Mantém a altura igual ao da caixa de pesquisa */
+  padding: 0 20px;
+  border: none;
+  border-radius: 30px;
+  background-color: rgb(209, 89, 90);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgb(222, 75, 75);
+  position: relative;
+}
+
+.filter-button:hover {
+  background-color: rgb(185, 50, 50);  /* Cor mais escura ao passar o mouse */
+}
+
+/* Dropdown de Filtros */
+.filter-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  position: absolute;
+  top: 50%; /* Alinha verticalmente ao centro do botão */
+  left: 100%; /* Posiciona o dropdown à direita do botão */
+  transform: translateY(-50%); /* Ajusta o alinhamento vertical */
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  width: 300px;
+}
+
+/* Select de Filtro (Bairro e Especialidade) */
+.bairro-select,
+.especialidade-select {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Conteúdo Principal - Título */
+.home-content {
+  padding: 20px;
+  text-align: center;
+}
+
 .home-title {
-font-size: 50px;
-color: #333;
-margin-bottom: 20px;
+  font-size: 50px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Logo */
+.home-logo-container {
+  margin-top: 20px;
 }
 
 .home-logo {
-width: 250px;  
-height: auto;  
-margin-top: 10px;  
-} 
+  width: 200px;
+  height: auto;
+}
+
+/* Cartões de Hospitais */
+.hospital-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 20px;
+}
+
+.hospital-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hospital-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.hospital-card p {
+  margin-top: 10px;
+  color: #777;
+}
