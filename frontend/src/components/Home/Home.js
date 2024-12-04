@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../../assets/images/logo.png';
+import axios from 'axios';
+import { Link } from 'react-router-dom'; // Adicionar Link para navegação entre páginas
 
 const Home = () => {
     const [search, setSearch] = useState('');
@@ -8,9 +10,12 @@ const Home = () => {
     const [especialidade, setEspecialidade] = useState('');
     const [hospitals, setHospitals] = useState([]);
     const [isFilterOpen, setIsFilterOpen] = useState(false); // Controla a exibição do filtro
-    const [debounceTimeout, setDebounceTimeout] = useState(null); // Estado para o debounce
 
-    const handleSearchChange = (e) => {
+    const toggleFilterMenu = () => {
+        setIsFilterOpen(!isFilterOpen)
+    };
+
+    const handleUsernameChange = (e) => {
         setSearch(e.target.value);
     };
 
@@ -22,37 +27,19 @@ const Home = () => {
         setEspecialidade(e.target.value);
     };
 
-    // Função para realizar a pesquisa
-    const handleSearch = async () => {
-        console.log('Pesquisando por hospital:', search, 'no bairro:', bairro, 'com especialidade:', especialidade);
-
-        try {
-            const response = await fetch(`http://localhost:8000/api/hospitals?name=${search}&bairro=${bairro}&especialidade=${especialidade}`);
-            const data = await response.json();
-            setHospitals(data); // Atualiza os hospitais encontrados
-        } catch (error) {
-            console.error('Erro ao buscar hospitais:', error);
-        }
-    };
-
-    // Função para alternar a exibição do menu de filtros
-    const toggleFilterMenu = () => {
-        setIsFilterOpen(!isFilterOpen);
-    };
-
     // Função para realizar a pesquisa com debouncing
     useEffect(() => {
-        // Se a pesquisa for alterada, aguarda um tempo antes de fazer a requisição
-        if (debounceTimeout) clearTimeout(debounceTimeout); // Limpar o timeout anterior
+        const handleSearch = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/hosp/?username=${search}&bairro=${bairro}&specialty=${especialidade}`);
+                console.log(response)
+                setHospitals(response.data);
+            } catch (error) {
+                console.log('Não foi possível carregar os hospitais.');
+            }
+        };
 
-        const newTimeout = setTimeout(() => {
-            handleSearch(); // Chama a função de pesquisa após o tempo de espera
-        }, 500); // Espera 500ms após a última digitação
-
-        setDebounceTimeout(newTimeout); // Atualiza o timeout
-
-        // Limpar o timeout quando o componente for desmontado ou quando search mudar
-        return () => clearTimeout(newTimeout);
+        handleSearch()
     }, [search, bairro, especialidade]); // Re-executa quando os valores de pesquisa ou filtros mudarem
 
     return (
@@ -63,13 +50,13 @@ const Home = () => {
                     <input
                         type="text"
                         value={search}
-                        onChange={handleSearchChange}
+                        onChange={event => handleUsernameChange(event)}
                         className="search-input"
                         placeholder="Pesquise por hospitais"
                     />
 
                     {/* Botão de Buscar */}
-                    <button type="button" onClick={handleSearch} className="search-button">
+                    <button type="button" className="search-button">
                         Buscar
                     </button>
 
@@ -82,15 +69,16 @@ const Home = () => {
                     {isFilterOpen && (
                         <div className="filter-dropdown">
                             {/* Filtro de Bairro */}
-                            <select value={bairro} onChange={handleBairroChange} className="bairro-select">
-                                <option value="">Bairro</option>
-                                <option value="bairro1">Bairro 1</option>
-                                <option value="bairro2">Bairro 2</option>
-                                <option value="bairro3">Bairro 3</option>
-                            </select>
+                            <input
+                                type="text"
+                                value={bairro}
+                                onChange={event => handleBairroChange(event)}
+                                className="search-input"
+                                placeholder="Pesquise por bairro"
+                            />
 
                             {/* Filtro de Especialidade */}
-                            <select value={especialidade} onChange={handleEspecialidadeChange} className="especialidade-select">
+                            <select value={especialidade} onChange={event => handleEspecialidadeChange(event)} className="especialidade-select">
                                 <option value="">Especialidade</option>
                                 <option value="cardiologia">Cardiologia</option>
                                 <option value="ortopedia">Ortopedia</option>
@@ -110,10 +98,16 @@ const Home = () => {
             {/* Exibição dos Hospitais Encontrados */}
             <div className="hospital-list">
                 {hospitals.length > 0 ? (
-                    hospitals.map((hospital) => (
-                        <div key={hospital.id} className="hospital-card">
-                            <h3>{hospital.name}</h3>
+                    hospitals.map((hospital, index) => (
+                        <div key={index} className="hospital-card">
+                            <h3>{hospital.username}</h3>
+                            <h3>{hospital.user.username}</h3>
                             <p>{hospital.address}</p>
+
+                            {/* Link para Detalhes do Hospital */}
+                            <Link to={`/hospitals/${hospital.id}`} className="view-details">
+                                Ver Detalhes
+                            </Link>
                         </div>
                     ))
                 ) : (

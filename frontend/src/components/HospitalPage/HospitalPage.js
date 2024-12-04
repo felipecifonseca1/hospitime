@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const HospitalPage = () => {
-    const { id } = useParams(); // Captura o ID do hospital da URL
     const [hospital, setHospital] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/hosp/api/hospitals/${hospital.id}/`)  // Ajuste a URL para acessar o hospital pelo ID
+        fetch(`http://localhost:8000/hosp/api/hospitals/hospital/`)  // Ajuste a URL para acessar o hospital pelo ID
             .then(response => response.json())
             .then(data => {
                 setHospital(data);

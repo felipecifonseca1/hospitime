@@ -1,30 +1,53 @@
-
 .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    padding: 0 20px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .register-box {
     width: 100%;
-    max-width: 400px;
-    padding: 30px;
+    max-width: 600px; /* Largura máxima para o formulário */
+    padding: 20px;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    text-align: center; /* Centralizar o conteúdo dentro da caixa */
+    box-sizing: border-box;
 }
 
 h2 {
+    text-align: center;
     font-size: 24px;
     color: #333;
-    margin-bottom: 20px; /* Espaçamento abaixo do título */
+    margin-bottom: 20px;
+}
+
+/* Centralizar a seleção do tipo de usuário */
+.type-selector {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.type-selector select {
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Organizar os campos em duas colunas */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+    gap: 20px; /* Espaço entre os campos */
 }
 
 .input-group {
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .input-group label {
@@ -32,16 +55,22 @@ h2 {
     color: #333;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
+/* Botão centralizado */
+.link_botao {
+    grid-column: span 2; /* Faz o botão ocupar as duas colunas */
+    text-align: center;
+}
+
 button {
-    width: 100%;
+    width: 50%; /* Largura do botão */
     padding: 12px;
     background-color: rgb(209, 89, 90);
     color: white;
@@ -61,32 +90,13 @@ button:hover {
     text-align: center;
 }
 
-.link_botao a {
-    color: white; 
-    text-decoration: none; 
-}
+/* Ajustes para telas menores */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Muda para uma coluna em telas menores */
+    }
 
-.link_botao button {
-    background-color: rgb(209, 89, 90); 
-    color: white; 
-    border: none; 
-    border-radius: 5px; 
-    padding: 12px; 
-    cursor: pointer; 
-    font-size: 16px;
-}
-
-.link_botao button:hover {
-    background-color: rgb(170, 73, 73); 
-}
-
-/* Altere o tamanho da caixa seletora */
-select {
-    width: 200px;   /* Define a largura da caixa */
-    width: 100%;
-    max-width: 400px;
-    padding: 10px;   /* Adiciona preenchimento interno */
-    border-radius: 5px; /* Adiciona borda arredondada */
-    border: 1px solid #ccc; /* Define a cor da borda */
-    background-color: white; /* Cor de fundo */
+    button {
+        width: 100%; /* Botão ocupa toda a largura em telas menores */
+    }
 }

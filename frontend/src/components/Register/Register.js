@@ -13,8 +13,10 @@ const Register = () => {
     const [userType, setUserType] = useState('patient'); // Tipo de usuário: paciente ou hospital
     const [hospitalName, setHospitalName] = useState(''); // Nome do hospital (hospital)
     const [healthPlan, setHealthPlan] = useState(''); // Plano de saúde (paciente)
-    const [address, setAddress] = useState(''); // Endereço (hospital)
+    const [patientAddress, setPatientAddress] = useState(''); // Endereço do paciente
+    const [hospitalAddress, setHospitalAddress] = useState(''); // Endereço do hospital
     const [specialties, setSpecialties] = useState(''); // Especialidades (hospital)
+    const [birthDate, setBirthDate] = useState(''); // Data de nascimento (paciente)
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [network, setNetwork] = useState(''); // Rede do hospital
@@ -36,27 +38,38 @@ const Register = () => {
             return;
         }
 
-        if (userType === 'hospital' && (!hospitalName || !address || !specialties)) {
+        if (userType === 'hospital' && (!hospitalName || !hospitalAddress || !specialties)) {
             setError('Nome do hospital, endereço e especialidades são obrigatórios para hospitais.');
             return;
         }
 
         try {
-            // Enviando dados para o backend
-            const response = await axios.post('http://localhost:8000/api/register/', {
-                username: userType === 'patient' ? username : undefined,
-                email: userType === 'patient' ? email : undefined,
-                password,
-                confirm_password: confirmPassword,
-                first_name: userType === 'patient' ? firstName : undefined,
-                last_name: userType === 'patient' ? lastName : undefined,
-                user_type: userType,
-                hospital_name: userType === 'hospital' ? hospitalName : undefined,
-                address: userType === 'hospital' ? address : undefined,
-                specialties: userType === 'hospital' ? specialties : undefined,
-                network: userType === 'hospital' ? network : undefined,
-                health_plan: userType === 'patient' ? healthPlan : undefined
-            });
+            let response
+            if (userType === 'patient') {
+                 // Enviando dados para o backend
+                response = await axios.post('http://localhost:8000/acc/register/', {
+                    // Campos para o paciente
+                    username,
+                    email,
+                    password,
+                    first_name: firstName,
+                    last_name: lastName,
+                    address: patientAddress,
+                    health_plan: healthPlan,
+                    birth_date: birthDate,
+                })
+            } else {
+                response = await axios.post('http://localhost:8000/hosp/register/', {
+                    // Campos para o hospital
+                    username: hospitalName,
+                    password,
+                    email,
+                    specialties,
+                    network,
+                    address: hospitalAddress,
+                    convenios,
+                }) 
+            }
 
             // Armazenar tipo de usuário no localStorage após o sucesso
             localStorage.setItem('userType', userType);
@@ -87,45 +100,22 @@ const Register = () => {
         <div className="register-container">
             <div className="register-box">
                 <h2>Cadastro de Usuário</h2>
-                <form onSubmit={handleRegister}>
-                    {/* Seletor de Tipo de Usuário */}
-                    <div className="input-group">
-                        <label>Tipo de Usuário:</label>
-                        <select
-                            value={userType}
-                            onChange={(e) => setUserType(e.target.value)}
-                            required
-                        >
-                            <option value="patient">Paciente</option>
-                            <option value="hospital">Hospital</option>
-                        </select>
-                    </div>
-
-                    {/* Campos comuns para Paciente e Hospital */}
-                    {(userType === 'patient' || userType === 'hospital') && (
-                        <div>
-                            <div className="input-group">
-                                <label>Senha:</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-
-                            <div className="input-group">
-                                <label>Confirmar Senha:</label>
-                                <input
-                                    type="password"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                        </div>
-                    )}
-
+    
+                {/* Centralizar a seleção do tipo de usuário */}
+                <div className="type-selector">
+                    <label>Tipo de Usuário:</label>
+                    <select
+                        value={userType}
+                        onChange={(e) => setUserType(e.target.value)}
+                        required
+                    >
+                        <option value="patient">Paciente</option>
+                        <option value="hospital">Hospital</option>
+                    </select>
+                </div>
+    
+                {/* Formulário em duas colunas */}
+                <form className="form-grid" onSubmit={handleRegister}>
                     {/* Campos específicos para Paciente */}
                     {userType === 'patient' && (
                         <>
@@ -138,7 +128,6 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
                             <div className="input-group">
                                 <label>E-mail:</label>
                                 <input
@@ -148,9 +137,26 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
                             <div className="input-group">
-                                <label>Nome:</label>
+                                <label>Senha:</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Confirmar Senha:</label>
+                                <input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Primeiro Nome:</label>
                                 <input
                                     type="text"
                                     value={firstName}
@@ -158,7 +164,6 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
                             <div className="input-group">
                                 <label>Sobrenome:</label>
                                 <input
@@ -168,8 +173,6 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
-
                             <div className="input-group">
                                 <label>Plano de Saúde:</label>
                                 <input
@@ -179,9 +182,27 @@ const Register = () => {
                                     required
                                 />
                             </div>
+                            <div className="input-group">
+                                <label>Endereço:</label>
+                                <input
+                                    type="text"
+                                    value={patientAddress}
+                                    onChange={(e) => setPatientAddress(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Data de Nascimento:</label>
+                                <input
+                                    type="date"
+                                    value={birthDate}
+                                    onChange={(e) => setBirthDate(e.target.value)}
+                                    required
+                                />
+                            </div>
                         </>
                     )}
-
+    
                     {/* Campos específicos para Hospital */}
                     {userType === 'hospital' && (
                         <>
@@ -194,17 +215,42 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
+                            <div className="input-group">
+                                <label>Senha:</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Confirmar Senha:</label>
+                                <input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
                             <div className="input-group">
                                 <label>Endereço:</label>
                                 <input
                                     type="text"
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
+                                    value={hospitalAddress}
+                                    onChange={(e) => setHospitalAddress(e.target.value)}
                                     required
                                 />
                             </div>
-
+                            <div className="input-group">
+                                <label>E-mail:</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
                             <div className="input-group">
                                 <label>Especialidades:</label>
                                 <input
@@ -214,7 +260,6 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
                             <div className="input-group">
                                 <label>Rede de Saúde:</label>
                                 <input
@@ -224,7 +269,6 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
                             <div className="input-group">
                                 <label>Convênios Atendidos:</label>
                                 <input
@@ -236,19 +280,20 @@ const Register = () => {
                             </div>
                         </>
                     )}
-
-                    {/* Exibindo erros */}
-                    {error && <p className="error">{error}</p>}
+    
+                    {/* Botão de enviar */}
                     <div className="link_botao">
                         <button type="submit">Cadastrar</button>
                     </div>
                 </form>
-
-                {/* Mensagem de sucesso */}
-                {message && <p>{message}</p>}
+    
+                {/* Mensagens de erro e sucesso */}
+                {error && <p className="error">{error}</p>}
+                {message && <p className="success">{message}</p>}
             </div>
         </div>
     );
+    
 };
 
 export default Register;

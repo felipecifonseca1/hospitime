@@ -12,7 +12,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/login/', {
+            const response = await axios.post('http://localhost:8000/acc/login/', {
                 username,
                 password,
             });
@@ -21,7 +21,7 @@ const Login = () => {
             localStorage.setItem('token', response.data.token);
 
             // Redirecionando para a página Home após login bem-sucedido
-            navigate('/home'); // Redireciona para a página Home
+            navigate('/'); // Redireciona para a página Home
         } catch (err) {
             setError('Credenciais inválidas.');
         }

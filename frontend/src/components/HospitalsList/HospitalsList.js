@@ -9,7 +9,7 @@ const HospitalsList = () => {
     useEffect(() => {
         const fetchHospitals = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/hosp/api/hospitais/');
+                const response = await axios.get('http://localhost:3000/hosp/');
                 setHospitals(response.data);
             } catch (error) {
                 setError('Não foi possível carregar os hospitais.');

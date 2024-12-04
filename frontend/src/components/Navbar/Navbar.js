@@ -31,21 +31,16 @@ const Navbar = () => {
                     {isLoggedIn ? (
                         <>
                             {/* Exibe "Meu perfil" para qualquer tipo de usuário */}
-                            <li className="navbar-item">
-                                <NavLink to="/profile" className="navbar-link">Meu perfil</NavLink>
-                            </li>
+                            {userType === 'pacient' && (
+                                <li className="navbar-item">
+                                    <NavLink to="/profile" className="navbar-link">Meu perfil</NavLink>
+                                </li>
+                            )}
 
                             {/* Se o usuário for hospital, exibe a opção de gerenciar hospitais */}
                             {userType === 'hospital' && (
                                 <li className="navbar-item">
                                     <NavLink to="/manage-hospitals" className="navbar-link">Gerenciar Hospitais</NavLink>
-                                </li>
-                            )}
-
-                            {/* Se o usuário for paciente, exibe a opção de agendar consultas */}
-                            {userType === 'patient' && (
-                                <li className="navbar-item">
-                                    <NavLink to="/appointments" className="navbar-link">Agendar Consulta</NavLink>
                                 </li>
                             )}
 
